@@ -7,5 +7,7 @@ data class MovieEntityDto(
     val overview: String?,
     val vote_count: Int?,
     val release_date: String?,
-    val poster_path: String?
+    val poster_path: String?,
+    val isFavourite: Boolean,
+    val ratings: Short?
 )
