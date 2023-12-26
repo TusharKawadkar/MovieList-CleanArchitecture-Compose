@@ -10,8 +10,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
+import com.example.samplemovielistcleanarchitecture.ui.composables.screens.LoginScreen
+import com.example.samplemovielistcleanarchitecture.ui.composables.screens.SplashScreen
 import com.example.samplemovielistcleanarchitecture.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,6 +36,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ApplicationScreen() {
     val navigationController = rememberNavController()
+    AppNavigation(navigationController)
+
+}
+
+@Composable
+fun AppNavigation(navigationController: NavHostController) {
     Scaffold(modifier = Modifier, bottomBar = {
         BottomNavigation {
 
@@ -41,6 +54,33 @@ fun ApplicationScreen() {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+            LandingPageGraph(navController = navigationController)
+            MainGraph(navController = navigationController)
+        }
+    }
+}
+
+fun NavGraphBuilder.LandingPageGraph(navController: NavController) {
+    navigation(startDestination = "screen_splash", route = "") {
+        composable("screen_splash") {
+            SplashScreen {
+                //if logged in -> movielist else login
+            }
+        }
+        composable("screen_login") {
+            LoginScreen {
+                // navigate to route - main
+            }
+        }
+    }
+}
+
+fun NavGraphBuilder.MainGraph(navController: NavController) {
+    navigation(startDestination = "", route = "") {
+        composable("screen_movie_list") {
+
+        }
+        composable("screen_favourites") {
 
         }
     }

@@ -7,7 +7,7 @@ import com.example.samplemovielistcleanarchitecture.core.network.dto.RemoteRespo
 import com.example.samplemovielistcleanarchitecture.core.utils.AppConstants
 import com.example.samplemovielistcleanarchitecture.data.local.entities.MovieItemEntity
 import com.example.samplemovielistcleanarchitecture.data.remote.MovieListItemDto
-import com.example.samplemovielistcleanarchitecture.data.repository.MovieListRepository
+import com.example.samplemovielistcleanarchitecture.data.repository.movielist.MovieListRepository
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 

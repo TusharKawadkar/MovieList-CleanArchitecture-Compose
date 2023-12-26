@@ -7,9 +7,9 @@ import com.example.samplemovielistcleanarchitecture.core.database.MoviesDao
 import com.example.samplemovielistcleanarchitecture.core.network.MoviesApiService
 import com.example.samplemovielistcleanarchitecture.core.utils.AppConstants
 import com.example.samplemovielistcleanarchitecture.core.utils.NetworkUtils
-import com.example.samplemovielistcleanarchitecture.data.repository.MovieListLocalRepository
-import com.example.samplemovielistcleanarchitecture.data.repository.MovieListRemoteRepository
-import com.example.samplemovielistcleanarchitecture.data.repository.MovieListRepository
+import com.example.samplemovielistcleanarchitecture.data.repository.movielist.MovieListLocalRepository
+import com.example.samplemovielistcleanarchitecture.data.repository.movielist.MovieListRemoteRepository
+import com.example.samplemovielistcleanarchitecture.data.repository.movielist.MovieListRepository
 import com.example.samplemovielistcleanarchitecture.domain.usecases.MovieListUseCase
 import com.google.gson.Gson
 import okhttp3.Interceptor
