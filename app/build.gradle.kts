@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
-    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -79,10 +78,17 @@ dependencies {
 
     //network
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:3.14.9")
 
-    //DI
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    //DB
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-common:$room_version")
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    //Type converter
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
 }
 
 // Allow references to generated code
