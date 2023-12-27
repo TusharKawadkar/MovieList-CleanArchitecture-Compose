@@ -17,7 +17,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.example.samplemovielistcleanarchitecture.ui.composables.screens.LoginScreen
 import com.example.samplemovielistcleanarchitecture.ui.composables.screens.SplashScreen
 import com.example.samplemovielistcleanarchitecture.ui.theme.AppTheme
 
@@ -37,19 +36,20 @@ class MainActivity : ComponentActivity() {
 fun ApplicationScreen() {
     val navigationController = rememberNavController()
     AppNavigation(navigationController)
-
 }
 
 @Composable
 fun AppNavigation(navigationController: NavHostController) {
-    Scaffold(modifier = Modifier, bottomBar = {
-        BottomNavigation {
-
-        }
-    }) { paddingValues ->
+    Scaffold(
+        modifier = Modifier,
+        /*bottomBar = {
+            BottomNavigation {
+            }
+        }*/
+    ) { paddingValues ->
         NavHost(
             navController = navigationController,
-            startDestination = "",
+            startDestination = "landing",
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
@@ -61,24 +61,19 @@ fun AppNavigation(navigationController: NavHostController) {
 }
 
 fun NavGraphBuilder.LandingPageGraph(navController: NavController) {
-    navigation(startDestination = "screen_splash", route = "") {
+    navigation(startDestination = "screen_splash", route = "landing") {
         composable("screen_splash") {
             SplashScreen {
-                //if logged in -> movielist else login
-            }
-        }
-        composable("screen_login") {
-            LoginScreen {
-                // navigate to route - main
+                navController.navigate("main")
             }
         }
     }
 }
 
 fun NavGraphBuilder.MainGraph(navController: NavController) {
-    navigation(startDestination = "", route = "") {
+    navigation(startDestination = "screen_movie_list", route = "main") {
         composable("screen_movie_list") {
-
+            navController.navigate("main")
         }
         composable("screen_favourites") {
 

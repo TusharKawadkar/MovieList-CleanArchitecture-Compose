@@ -1,6 +1,8 @@
 package com.example.samplemovielistcleanarchitecture.ui.composables.components
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.EaseInBack
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.EaseInOutElastic
@@ -15,6 +17,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +30,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -36,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.samplemovielistcleanarchitecture.R
 import com.example.samplemovielistcleanarchitecture.domain.usecases.SplashScreenUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Preview
@@ -46,19 +51,18 @@ fun SplashScreenAnimImageLayout() {
     val splashScreenUseCase = SplashScreenUseCase()
     val screenResListForward = splashScreenUseCase.getImageResList()
     val screenResListReversed = splashScreenUseCase.getImageResListReversed()
+    val dimScreenAnimationState = remember {
+        Animatable(0f)
+    }
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
-        LazyColumn (
-            state = scrollState,
-            modifier = Modifier
-                .fillMaxSize()
-                .graphicsLayer {
-                    shape = traingleDown
-                    clip = true
-                }
-        ){
+        LazyColumn(state = scrollState, modifier = Modifier
+            .fillMaxSize()
+            .graphicsLayer {
+                shape = traingleDown
+                clip = true
+            }) {
 
             items(screenResListForward.size) {
                 Image(
@@ -72,16 +76,14 @@ fun SplashScreenAnimImageLayout() {
             }
         }
 
-        LazyColumn (
-            state = scrollStateReversed,
+        LazyColumn(state = scrollStateReversed,
             reverseLayout = true,
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer {
                     shape = traingleUp
                     clip = true
-                }
-        ){
+                }) {
             items(screenResListReversed.size) {
                 Image(
                     painter = painterResource(id = screenResListReversed[it]),
@@ -93,6 +95,7 @@ fun SplashScreenAnimImageLayout() {
                 )
             }
         }
+        DimScreen(alphaAnimation = dimScreenAnimationState)
         LaunchedEffect(key1 = Unit) {
             launch {
                 while (true) {
@@ -107,7 +110,27 @@ fun SplashScreenAnimImageLayout() {
                 }
             }
         }
+        LaunchedEffect(Unit) {
+            launch {
+                delay(2500)
+                dimScreenAnimationState.animateTo(
+                    0.85f, animationSpec = tween(
+                        800
+                    )
+                )
+            }
+        }
     }
+}
+
+@Composable
+fun DimScreen(alphaAnimation: Animatable<Float, AnimationVector1D>) {
+    Spacer(modifier = Modifier
+        .fillMaxSize()
+        .graphicsLayer {
+            alpha = alphaAnimation.value
+        }
+        .background(Color.Black))
 }
 
 private val traingleUp = GenericShape { size, _ ->
@@ -123,11 +146,13 @@ private val traingleDown = GenericShape { size, _ ->
 }
 
 suspend fun ScrollableState.autoScroll(
-    animationSpec: AnimationSpec<Float> = tween(durationMillis = 5000, easing = LinearEasing)
+    animationSpec: AnimationSpec<Float> = tween(
+        durationMillis = 10000, easing = LinearEasing
+    )
 ) {
     var previousValue = 0f
     scroll(MutatePriority.PreventUserInput) {
-        animate(0f, 500f, animationSpec = animationSpec) { currentValue, _ ->
+        animate(0f, 600f, animationSpec = animationSpec) { currentValue, _ ->
             previousValue += scrollBy(currentValue - previousValue)
         }
     }

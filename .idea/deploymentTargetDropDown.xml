@@ -2,7 +2,35 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="ExampleInstrumentedTest">
+        <State />
+      </entry>
+      <entry key="SplashScreen">
+        <State />
+      </entry>
+      <entry key="SplashScreenAnimImage">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="$USER_HOME$/.android/avd/dev1_6.71inch_1440by3120px_560dpi_api34.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2023-12-26T05:35:07.728846Z" />
+        </State>
+      </entry>
+      <entry key="SplashScreenAnimImageLayout">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="printAll">
         <State />
       </entry>
     </value>
