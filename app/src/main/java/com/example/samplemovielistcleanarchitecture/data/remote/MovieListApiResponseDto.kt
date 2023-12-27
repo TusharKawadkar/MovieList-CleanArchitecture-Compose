@@ -1,3 +1,6 @@
 package com.example.samplemovielistcleanarchitecture.data.remote
 
-data class MovieListApiResponseDto(val page: Int, val results: List<MovieListItemDto>)
+data class MovieListApiResponseDto(
+    val page: Int? = null,
+    val results: List<MovieListItemDto>? = null
+)

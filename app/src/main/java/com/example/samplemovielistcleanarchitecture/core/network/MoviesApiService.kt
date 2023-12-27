@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface MoviesApiService {
 
-    @GET("/movie/popular")
-    fun fetchMoviesList(): Call<MovieListApiResponseDto>
+    @GET("movie/popular")
+    suspend fun fetchMoviesList(): MovieListApiResponseDto
 
 }

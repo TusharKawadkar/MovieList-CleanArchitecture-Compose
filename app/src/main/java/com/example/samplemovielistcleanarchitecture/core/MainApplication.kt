@@ -7,6 +7,6 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        AppRepository.init(this)
+        AppRepository.initInstance(this)
     }
 }

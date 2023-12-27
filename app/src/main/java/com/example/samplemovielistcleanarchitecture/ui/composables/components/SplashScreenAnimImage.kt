@@ -18,6 +18,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -58,7 +59,7 @@ fun SplashScreenAnimImageLayout() {
     val dimScreenAnimationState = remember {
         Animatable(0f)
     }
-    Surface(
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
         LazyColumn(state = scrollState, modifier = Modifier

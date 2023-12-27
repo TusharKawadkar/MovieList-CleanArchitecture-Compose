@@ -3,7 +3,8 @@ package com.example.samplemovielistcleanarchitecture.data.local.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+
+@Entity(tableName = "movieitementity")
 data class MovieItemEntity(
     @PrimaryKey val id: Int,
     val original_language: String,

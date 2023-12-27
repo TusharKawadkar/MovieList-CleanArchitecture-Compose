@@ -7,7 +7,10 @@ import kotlinx.coroutines.flow.Flow
 class MovieListLocalRepository(private val dao: MoviesDao) {
 
     fun addToDatabase(moviesList: List<MovieItemEntity>) {
-        dao.addMoviesToDb(moviesList)
+        repeat(moviesList.size) {
+            dao.addMoviesToDb(moviesList[it])
+        }
+
     }
 
     fun observeMovieList(): Flow<List<MovieItemEntity>> {

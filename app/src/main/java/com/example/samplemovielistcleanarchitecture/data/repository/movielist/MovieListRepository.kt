@@ -2,6 +2,7 @@ package com.example.samplemovielistcleanarchitecture.data.repository.movielist
 
 import com.example.samplemovielistcleanarchitecture.core.network.dto.RemoteResponseResult
 import com.example.samplemovielistcleanarchitecture.data.local.entities.MovieItemEntity
+import com.example.samplemovielistcleanarchitecture.data.remote.MovieListApiResponseDto
 import com.example.samplemovielistcleanarchitecture.data.remote.MovieListItemDto
 import kotlinx.coroutines.flow.Flow
 
@@ -14,7 +15,7 @@ class MovieListRepository(
         return localRepository.observeMovieList()
     }
 
-    fun callMovieListApi(): RemoteResponseResult<List<MovieListItemDto>> {
+    suspend fun callMovieListApi(): Flow<RemoteResponseResult<MovieListApiResponseDto>> {
         return remoteRepository.getMoviesList()
     }
 

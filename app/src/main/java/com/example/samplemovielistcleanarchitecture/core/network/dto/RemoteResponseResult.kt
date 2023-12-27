@@ -6,7 +6,7 @@ sealed class RemoteResponseResult<T> {
         RemoteResponseResult<T>()
 
     fun isSuccess(): Boolean {
-        return Success<T>::javaClass == this.javaClass
+        return this is RemoteResponseResult.Success<T>
     }
 
     fun parseToSuccessClass(): Success<T> {

@@ -17,6 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.example.samplemovielistcleanarchitecture.core.repository.AppRepository
+import com.example.samplemovielistcleanarchitecture.ui.composables.screens.MovieListScreen
 import com.example.samplemovielistcleanarchitecture.ui.composables.screens.SplashScreen
 import com.example.samplemovielistcleanarchitecture.ui.theme.AppTheme
 
@@ -73,7 +75,9 @@ fun NavGraphBuilder.LandingPageGraph(navController: NavController) {
 fun NavGraphBuilder.MainGraph(navController: NavController) {
     navigation(startDestination = "screen_movie_list", route = "main") {
         composable("screen_movie_list") {
-            navController.navigate("main")
+            MovieListScreen{
+
+            }
         }
         composable("screen_favourites") {
 
