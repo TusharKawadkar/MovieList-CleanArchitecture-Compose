@@ -1,12 +1,9 @@
 package com.example.samplemovielistcleanarchitecture.core.network
 
-import com.example.samplemovielistcleanarchitecture.data.remote.MovieListApiResponseDto
-import retrofit2.Call
+import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.remote.MovieListApiResponseDto
 import retrofit2.http.GET
 
 interface MoviesApiService {
-
     @GET("movie/popular")
     suspend fun fetchMoviesList(): MovieListApiResponseDto
-
 }

@@ -91,6 +91,9 @@ dependencies {
     //Type converter
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    //AsyncImage
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
 }
 
 // Allow references to generated code

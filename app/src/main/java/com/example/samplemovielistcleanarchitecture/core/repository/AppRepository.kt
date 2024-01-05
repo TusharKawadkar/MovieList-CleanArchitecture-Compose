@@ -4,22 +4,19 @@ import android.app.Application
 import androidx.room.Room
 import com.example.samplemovielistcleanarchitecture.core.MainApplication
 import com.example.samplemovielistcleanarchitecture.core.database.AppDatabase
-import com.example.samplemovielistcleanarchitecture.core.database.MoviesDao
+import com.example.samplemovielistcleanarchitecture.feature_movie.data.sources.local.MoviesDao
 import com.example.samplemovielistcleanarchitecture.core.network.MoviesApiService
 import com.example.samplemovielistcleanarchitecture.core.utils.AppConstants
 import com.example.samplemovielistcleanarchitecture.core.utils.NetworkUtils
-import com.example.samplemovielistcleanarchitecture.data.remote.MovieListApiResponseDto
-import com.example.samplemovielistcleanarchitecture.data.repository.movielist.MovieListLocalRepository
-import com.example.samplemovielistcleanarchitecture.data.repository.movielist.MovieListRemoteRepository
-import com.example.samplemovielistcleanarchitecture.data.repository.movielist.MovieListRepository
+import com.example.samplemovielistcleanarchitecture.feature_movie.data.repository.movielist.MovieListLocalRepository
+import com.example.samplemovielistcleanarchitecture.feature_movie.data.sources.remote.MovieListRemote
+import com.example.samplemovielistcleanarchitecture.feature_movie.data.repository.movielist.MovieListRepositoryImpl
 import com.example.samplemovielistcleanarchitecture.domain.usecases.MovieListUseCase
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.ref.WeakReference
@@ -65,8 +62,8 @@ class AppRepository {
 
     private fun createMovieListUseCase(): MovieListUseCase {
         val localRepo = MovieListLocalRepository(moviesDao)
-        val remoteRepo = MovieListRemoteRepository(moviesApiService, networkUtils)
-        val movieListRepo = MovieListRepository(localRepo, remoteRepo)
+        val remoteRepo = MovieListRemote(moviesApiService, networkUtils)
+        val movieListRepo = MovieListRepositoryImpl(localRepo, remoteRepo)
         return MovieListUseCase(movieListRepo)
     }
 
@@ -95,7 +92,6 @@ class AppRepository {
 
     private fun createRetrofit(): Retrofit {
         val gson = GsonBuilder()
-            //.registerTypeAdapter(object : TypeToken<Call<MovieListApiResponseDto?>?>() {}.type, MovieListDeserializer())
             .create()
 
         return Retrofit.Builder()

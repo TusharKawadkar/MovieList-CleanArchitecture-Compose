@@ -16,7 +16,7 @@
         android:theme="@style/Theme.SampleMovieListCleanArchitecture"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".core.ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.SampleMovieListCleanArchitecture">

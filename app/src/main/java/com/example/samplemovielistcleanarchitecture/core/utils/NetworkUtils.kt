@@ -17,5 +17,4 @@ class NetworkUtils(private val weakContext: WeakReference<Application>) {
             return false
         }
     }
-
 }
