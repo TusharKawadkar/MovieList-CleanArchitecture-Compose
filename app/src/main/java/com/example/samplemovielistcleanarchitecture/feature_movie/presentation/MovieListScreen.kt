@@ -108,7 +108,7 @@ fun MovieItemUI(movieItem: MovieItemEntity = testMovieItem) {
                 .height(LocalConfiguration.current.screenHeightDp.dp / 2)
         ) {
             val animState = remember {
-                androidx.compose.animation.core.Animatable(1f)
+                Animatable(1f)
             }
             LaunchedEffect(Unit) {
                 launch {
@@ -171,7 +171,7 @@ fun MovieItemUI(movieItem: MovieItemEntity = testMovieItem) {
                 .padding(start = 12.dp, end = 12.dp, top = 12.dp)
         ) {
             val alphaState = remember {
-                androidx.compose.animation.core.Animatable(0f)
+                Animatable(0f)
             }
             LaunchedEffect(Unit) {
                 launch {

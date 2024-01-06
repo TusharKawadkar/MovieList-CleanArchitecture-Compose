@@ -1,7 +1,7 @@
 package com.example.samplemovielistcleanarchitecture.core.di
 
+import android.app.Application
 import androidx.room.Room
-import com.example.samplemovielistcleanarchitecture.core.MainApplication
 import com.example.samplemovielistcleanarchitecture.core.database.AppDatabase
 import com.example.samplemovielistcleanarchitecture.core.utils.AppConstants
 import com.example.samplemovielistcleanarchitecture.core.utils.NetworkUtils
@@ -10,35 +10,28 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.ref.WeakReference
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 object BaseAppModule {
 
     @Singleton
     @Provides
-    fun provideAppReference(application: MainApplication): WeakReference<MainApplication> {
-        return WeakReference(application)
-    }
-
-    @Singleton
-    @Provides
-    fun provideNetworkUtil(weakApp: WeakReference<MainApplication>): NetworkUtils {
-        return NetworkUtils(weakApp)
+    fun provideNetworkUtil(app: Application): NetworkUtils {
+        return NetworkUtils(app)
     }
 
     @Provides
-    fun provideDatabase(weakApp: WeakReference<MainApplication>): AppDatabase {
-        return Room.databaseBuilder(weakApp.get()!!, AppDatabase::class.java, "app_db_2").build()
+    fun provideDatabase(app: Application): AppDatabase {
+        return Room.databaseBuilder(app, AppDatabase::class.java, "app_db_2").build()
     }
 
     @Singleton
