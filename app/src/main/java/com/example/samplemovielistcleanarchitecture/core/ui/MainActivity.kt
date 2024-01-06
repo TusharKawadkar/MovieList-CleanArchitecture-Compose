@@ -16,10 +16,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.example.samplemovielistcleanarchitecture.feature_movie.presentation.composables.screens.MovieListScreen
+import com.example.samplemovielistcleanarchitecture.feature_movie.presentation.MovieListScreen
 import com.example.samplemovielistcleanarchitecture.feature_intro.presentation.SplashScreen
 import com.example.samplemovielistcleanarchitecture.core.ui.theme.AppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,9 +75,7 @@ fun NavGraphBuilder.LandingPageGraph(navController: NavController) {
 fun NavGraphBuilder.MainGraph(navController: NavController) {
     navigation(startDestination = "screen_movie_list", route = "main") {
         composable("screen_movie_list") {
-            MovieListScreen{
-
-            }
+            MovieListScreen()
         }
         composable("screen_favourites") {
 

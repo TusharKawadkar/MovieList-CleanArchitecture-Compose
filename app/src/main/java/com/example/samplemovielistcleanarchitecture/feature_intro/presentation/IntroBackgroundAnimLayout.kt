@@ -1,19 +1,11 @@
-package com.example.samplemovielistcleanarchitecture.feature_movie.presentation.composables.components
+package com.example.samplemovielistcleanarchitecture.feature_intro.presentation
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.EaseInBack
-import androidx.compose.animation.core.EaseInOut
-import androidx.compose.animation.core.EaseInOutElastic
-import androidx.compose.animation.core.EaseOutCirc
-import androidx.compose.animation.core.EaseOutSine
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
@@ -23,39 +15,30 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.GenericShape
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.OffsetEffect
-import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.samplemovielistcleanarchitecture.R
-import com.example.samplemovielistcleanarchitecture.domain.usecases.SplashScreenUseCase
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Preview
 @Composable
-fun SplashScreenAnimImageLayout() {
+fun IntroBackgroundAnimLayout(viewModel: IntroScreenViewModel = hiltViewModel()) {
     val scrollState = rememberLazyListState()
     val scrollStateReversed = rememberLazyListState()
-    val splashScreenUseCase = SplashScreenUseCase()
-    val screenResListForward = splashScreenUseCase.getImageResList()
-    val screenResListReversed = splashScreenUseCase.getImageResListReversed()
+    val screenResListForward = viewModel.slideImagesState1.value
+    val screenResListReversed = viewModel.slideImagesState2.value
     val dimScreenAnimationState = remember {
         Animatable(0f)
     }
@@ -71,7 +54,7 @@ fun SplashScreenAnimImageLayout() {
 
             items(screenResListForward.size) {
                 Image(
-                    painter = painterResource(id = screenResListForward[it]),
+                    painter = painterResource(id = screenResListForward[it].imgRes),
                     contentDescription = "",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -91,7 +74,7 @@ fun SplashScreenAnimImageLayout() {
                 }) {
             items(screenResListReversed.size) {
                 Image(
-                    painter = painterResource(id = screenResListReversed[it]),
+                    painter = painterResource(id = screenResListReversed[it].imgRes),
                     contentDescription = "",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

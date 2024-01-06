@@ -1,4 +1,4 @@
-package com.example.samplemovielistcleanarchitecture.core.network
+package com.example.samplemovielistcleanarchitecture.feature_movie.data.sources.remote
 
 import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.remote.MovieListApiResponseDto
 import retrofit2.http.GET

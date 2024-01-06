@@ -11,14 +11,27 @@
       <entry key="SplashScreen">
         <State />
       </entry>
-      <entry key="SplashScreenAnimImageLayout">
+      <entry key="SplashScreen (1)">
+        <State />
+      </entry>
+      <entry key="SplashScreenAnimImageLayout (1)">
         <State />
       </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="printAll">
-        <State />
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="$USER_HOME$/.android/avd/dev1_6.71inch_1440by3120px_560dpi_api34.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-01-06T18:51:52.216861Z" />
+        </State>
       </entry>
     </value>
   </component>

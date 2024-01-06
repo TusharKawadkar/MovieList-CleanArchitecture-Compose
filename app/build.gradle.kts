@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -10,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.samplemovielistcleanarchitecture"
-        minSdk = 31
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -67,6 +68,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.navigation:navigation-compose:2.7.6")
     implementation("androidx.compose.material:material:1.5.4")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     //testing and tooling
     testImplementation("junit:junit:4.13.2")
@@ -93,6 +95,14 @@ dependencies {
 
     //AsyncImage
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    //Di
+    implementation("com.google.dagger:hilt-android:2.50")
+    annotationProcessor("com.google.dagger:hilt-compiler:2.50")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.50")
+    androidTestAnnotationProcessor("com.google.dagger:hilt-compiler:2.50")
+    testImplementation("com.google.dagger:hilt-android-testing:2.50")
+    testAnnotationProcessor("com.google.dagger:hilt-compiler:2.50")
 
 }
 
