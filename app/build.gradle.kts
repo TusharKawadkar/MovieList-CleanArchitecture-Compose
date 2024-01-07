@@ -15,6 +15,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = false
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -97,12 +98,13 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
 
     //Di
-    implementation("com.google.dagger:hilt-android:2.50")
-    annotationProcessor("com.google.dagger:hilt-compiler:2.50")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.50")
-    androidTestAnnotationProcessor("com.google.dagger:hilt-compiler:2.50")
-    testImplementation("com.google.dagger:hilt-android-testing:2.50")
-    testAnnotationProcessor("com.google.dagger:hilt-compiler:2.50")
+    val hiltVer = "2.50"
+    implementation("com.google.dagger:hilt-android:$hiltVer")
+    annotationProcessor("com.google.dagger:hilt-compiler:$hiltVer")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVer")
+    androidTestAnnotationProcessor("com.google.dagger:hilt-compiler:$hiltVer")
+    testImplementation("com.google.dagger:hilt-android-testing:$hiltVer")
+    testAnnotationProcessor("com.google.dagger:hilt-compiler:$hiltVer")
 
 }
 

@@ -1,4 +1,4 @@
-package com.example.samplemovielistcleanarchitecture.core
+package com.example.samplemovielistcleanarchitecture
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

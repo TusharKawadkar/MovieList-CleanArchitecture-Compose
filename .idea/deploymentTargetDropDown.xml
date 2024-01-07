@@ -2,21 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="MovieItemUI">
-        <State />
-      </entry>
-      <entry key="MovieListScreen">
-        <State />
-      </entry>
-      <entry key="SplashScreen">
-        <State />
-      </entry>
-      <entry key="SplashScreen (1)">
-        <State />
-      </entry>
-      <entry key="SplashScreenAnimImageLayout (1)">
-        <State />
-      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -25,12 +10,12 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/dev1_6.71inch_1440by3120px_560dpi_api34.avd" />
+                  <value value="$USER_HOME$/.android/avd/dev3_4.65inch_720by1280px_xhdpi_api34.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-06T18:51:52.216861Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-01-06T20:43:30.282299Z" />
         </State>
       </entry>
     </value>
