@@ -1,5 +1,6 @@
 package com.example.samplemovielistcleanarchitecture.feature_movie.presentation
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,8 @@ import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.lo
 import com.example.samplemovielistcleanarchitecture.feature_movie.domain.usecases.GetMovieList
 import com.example.samplemovielistcleanarchitecture.feature_movie.domain.usecases.MovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -28,30 +31,32 @@ class MovieViewModel @Inject constructor(
     val movieListState: State<List<MovieItemEntity>>
         get() = _movieListState
 
-    private var movieListJob: Job? = null
+    private var coroutine: CoroutineScope = CoroutineScope(Dispatchers.IO)
 
     init {
         observeMovieListStates()
     }
 
     private fun observeMovieListStates() {
-        viewModelScope.launch {
+        coroutine.launch {
             movieUseCase.getMovie()
-                .onEach {
-                    when(it){
+                .onEach { state ->
+                    when (state) {
                         is GetMovieList.States.Fetching -> {
                             setIndicationAsLoading()
                         }
+
                         is GetMovieList.States.Loaded -> {
                             setIndicationAsClearAll()
-                            _movieListState.value = it.data
+                            _movieListState.value = state.data
                         }
+
                         is GetMovieList.States.Failed -> {
-                            setIndicationAsFailed(it.type, it.message)
+                            setIndicationAsFailed(state.type, state.message)
                         }
                     }
                 }
-                .launchIn(viewModelScope)
+                .launchIn(this)
         }
     }
 

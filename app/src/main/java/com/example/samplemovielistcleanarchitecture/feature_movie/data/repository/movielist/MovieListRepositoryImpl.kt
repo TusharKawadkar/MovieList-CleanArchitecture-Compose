@@ -14,12 +14,12 @@ import java.lang.Exception
 import javax.inject.Inject
 
 class MovieListRepositoryImpl(
-    @Inject private val dao: MoviesDao,
-    @Inject private val api: MoviesApiService,
-    @Inject private val networkUtils: NetworkUtils
+    private val dao: MoviesDao,
+    private val api: MoviesApiService,
+    private val networkUtils: NetworkUtils
 ) : MovieListRepository {
 
-    override suspend fun observeMovieList() = dao.observeMovieList()
+    override fun observeMovieList() = dao.observeMovieList()
 
     override suspend fun updateRemoteDataToDb(movieList: List<MovieListItemDto>) {
         val dataList = movieList.map {
@@ -45,9 +45,10 @@ class MovieListRepositoryImpl(
                     val response = api.fetchMoviesList()
                     return@flow emit(parseMovieListResponse(response))
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     emit(
                         RemoteResponseResult.Failed(
-                            CommonFailureType.NO_INTERNET, AppConstants.PLEASE_CHECK_CONNECTION
+                            CommonFailureType.DATA_ERROR, AppConstants.SOMETHING_WENT_WRONG
                         )
                     )
                 }

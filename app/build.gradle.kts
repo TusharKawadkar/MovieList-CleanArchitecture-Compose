@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    kotlin("kapt")
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
 
@@ -50,6 +50,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
@@ -88,7 +89,6 @@ dependencies {
     implementation("androidx.room:room-common:$room_version")
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
 
     //Type converter
@@ -100,15 +100,17 @@ dependencies {
     //Di
     val hiltVer = "2.50"
     implementation("com.google.dagger:hilt-android:$hiltVer")
-    annotationProcessor("com.google.dagger:hilt-compiler:$hiltVer")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVer")
-    androidTestAnnotationProcessor("com.google.dagger:hilt-compiler:$hiltVer")
-    testImplementation("com.google.dagger:hilt-android-testing:$hiltVer")
-    testAnnotationProcessor("com.google.dagger:hilt-compiler:$hiltVer")
+    kapt("androidx.hilt:hilt-compiler:1.1.0")
+    //annotationProcessor("com.google.dagger:hilt-compiler:$hiltVer")
+    kapt("com.google.dagger:hilt-android-compiler:${hiltVer}")
+
+    //androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVer")
+    //androidTestAnnotationProcessor("com.google.dagger:hilt-compiler:$hiltVer")
+
+    //testImplementation("com.google.dagger:hilt-android-testing:$hiltVer")
+    //testAnnotationProcessor("com.google.dagger:hilt-compiler:$hiltVer")
+
 
 }
 
-// Allow references to generated code
-kapt {
-    correctErrorTypes = true
-}
+

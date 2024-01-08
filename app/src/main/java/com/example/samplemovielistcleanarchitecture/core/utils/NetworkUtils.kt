@@ -18,5 +18,6 @@ class NetworkUtils(private val weakContext: Application) {
         } ?: kotlin.run {
             return false
         }
+
     }
 }

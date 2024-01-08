@@ -7,7 +7,7 @@ import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.re
 import kotlinx.coroutines.flow.Flow
 
 interface MovieListRepository {
-    suspend fun observeMovieList(): Flow<List<MovieItemEntity>>
+    fun observeMovieList(): Flow<List<MovieItemEntity>>
 
     suspend fun getMoviesListRemote(): Flow<RemoteResponseResult<MovieListApiResponseDto>>
 

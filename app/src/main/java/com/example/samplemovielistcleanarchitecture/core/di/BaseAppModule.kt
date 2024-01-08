@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -31,7 +32,7 @@ object BaseAppModule {
 
     @Provides
     fun provideDatabase(app: Application): AppDatabase {
-        return Room.databaseBuilder(app, AppDatabase::class.java, "app_db_2").build()
+        return Room.databaseBuilder(app, AppDatabase::class.java, AppDatabase.DB_NAME).build()
     }
 
     @Singleton
@@ -55,8 +56,6 @@ object BaseAppModule {
                 "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NTZlNGJmYzAzNGIzMDUyMjM5MGE0Zjg4MWMxZjlhZiIsInN1YiI6IjY1ODFhMzM4YmYwZjYzMDg3NTYyY2U3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-03M7NZGmLuBeBGAv5pDWOD7yEfvOexo86Y_2CkUOwM"
             )
             chain.proceed(requestBuilder.build())
-        }).addInterceptor(HttpLoggingInterceptor().also { loggingInterceptor ->
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         }).build()
     }
 
