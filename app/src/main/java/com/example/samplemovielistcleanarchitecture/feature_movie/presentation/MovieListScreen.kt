@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.samplemovielistcleanarchitecture.R
+import com.example.samplemovielistcleanarchitecture.core.ui.theme.Purple40
+import com.example.samplemovielistcleanarchitecture.core.ui.theme.Purple80
 import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.local.MovieItemEntity
 import kotlinx.coroutines.launch
 
@@ -182,13 +184,13 @@ fun MovieItemUI(movieItem: MovieItemEntity = testMovieItem) {
                     .align(Alignment.End),
                 text = "${movieItem.release_date}",
                 style = MaterialTheme.typography.overline,
-                color = Color.White
+                color = Color.Gray
             )
             Text(
                 modifier = Modifier
                     .padding(top = 24.dp),
                 text = movieItem.original_title,
-                color = Color.Red,
+                color = Purple40,
                 style = MaterialTheme.typography.h6
             )
             Text(
@@ -203,14 +205,14 @@ fun MovieItemUI(movieItem: MovieItemEntity = testMovieItem) {
                     .padding(top = 40.dp),
                 text = "Language: ${movieItem.original_language} ",
                 style = MaterialTheme.typography.caption,
-                color = Color.White
+                color = Color.Gray
             )
             Text(
                 modifier = Modifier
                     .padding(top = 12.dp),
                 text = "${movieItem.vote_count} votes",
                 style = MaterialTheme.typography.subtitle2,
-                color = Color.Magenta
+                color = Purple80
             )
         }
     }
