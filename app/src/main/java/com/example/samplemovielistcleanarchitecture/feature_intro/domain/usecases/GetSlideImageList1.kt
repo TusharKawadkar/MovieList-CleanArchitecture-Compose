@@ -4,7 +4,7 @@ import com.example.samplemovielistcleanarchitecture.feature_intro.data.models.lo
 import com.example.samplemovielistcleanarchitecture.feature_intro.data.repository.IntroRepository
 import javax.inject.Inject
 
-class GetSlideImageList1 @Inject constructor(private val repository: IntroRepository) {
+class GetSlideImageList1 (private val repository: IntroRepository) {
     operator fun invoke(): List<IntroSlideItem> {
         return repository.getSlideImagesList1()
     }
