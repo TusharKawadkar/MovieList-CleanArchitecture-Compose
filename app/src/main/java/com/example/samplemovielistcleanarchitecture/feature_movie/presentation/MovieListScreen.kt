@@ -1,10 +1,12 @@
 package com.example.samplemovielistcleanarchitecture.feature_movie.presentation
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseInQuad
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,11 +33,13 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.example.samplemovielistcleanarchitecture.R
 import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.local.MovieItemEntity
 import kotlinx.coroutines.launch
 
@@ -106,6 +110,7 @@ fun MovieItemUI(movieItem: MovieItemEntity = testMovieItem) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(LocalConfiguration.current.screenHeightDp.dp / 2)
+                .clip(MaterialTheme.shapes.medium)
         ) {
             val animState = remember {
                 Animatable(1f)
@@ -133,12 +138,11 @@ fun MovieItemUI(movieItem: MovieItemEntity = testMovieItem) {
                     .graphicsLayer {
                         scaleX = animState.value
                         scaleY = animState.value
-                        translationX = animState.value
-                        translationY = animState.value
                     }
                     .clip(RectangleShape)
                     .clipToBounds()
                     .background(Color.Black)
+                    .animateContentSize()
             )
             Spacer(
                 modifier = Modifier
@@ -170,20 +174,6 @@ fun MovieItemUI(movieItem: MovieItemEntity = testMovieItem) {
                 .background(Color.Black)
                 .padding(start = 12.dp, end = 12.dp, top = 12.dp)
         ) {
-            val alphaState = remember {
-                Animatable(0f)
-            }
-            LaunchedEffect(Unit) {
-                launch {
-                    alphaState.animateTo(
-                        1f,
-                        animationSpec = tween(
-                            1000,
-                            easing = EaseInQuad
-                        )
-                    )
-                }
-            }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -194,32 +184,28 @@ fun MovieItemUI(movieItem: MovieItemEntity = testMovieItem) {
             )
             Text(
                 modifier = Modifier
-                    .padding(top = 24.dp)
-                    .alpha(alpha = alphaState.value),
+                    .padding(top = 24.dp),
                 text = movieItem.original_title,
                 color = Color.Red,
                 style = MaterialTheme.typography.h6
             )
             Text(
                 modifier = Modifier
-                    .padding(top = 12.dp)
-                    .alpha(alpha = alphaState.value),
+                    .padding(top = 12.dp),
                 text = movieItem.overview,
                 style = MaterialTheme.typography.caption,
                 color = Color.White
             )
             Text(
                 modifier = Modifier
-                    .padding(top = 40.dp)
-                    .alpha(alpha = alphaState.value),
+                    .padding(top = 40.dp),
                 text = "Language: ${movieItem.original_language} ",
                 style = MaterialTheme.typography.caption,
                 color = Color.White
             )
             Text(
                 modifier = Modifier
-                    .padding(top = 12.dp)
-                    .alpha(alpha = alphaState.value),
+                    .padding(top = 12.dp),
                 text = "${movieItem.vote_count} votes",
                 style = MaterialTheme.typography.subtitle2,
                 color = Color.Red
