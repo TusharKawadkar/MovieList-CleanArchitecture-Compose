@@ -135,7 +135,7 @@ private val traingleDown = GenericShape { size, _ ->
 
 suspend fun ScrollableState.autoScroll(
     animationSpec: AnimationSpec<Float> = tween(
-        durationMillis = 10000, easing = LinearEasing
+        durationMillis = 12000, easing = LinearEasing
     )
 ) {
     var previousValue = 0f

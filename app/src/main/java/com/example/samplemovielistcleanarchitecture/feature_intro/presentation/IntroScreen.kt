@@ -94,7 +94,7 @@ fun MovieReelStripAnimation(
             modifier = Modifier
                 .padding(top = 100.dp)
                 .scale(canvasAnimationState.value)
-                .offset(x = -500.dp + (1000.dp*canvasAnimationState.value))
+                .offset(x = -500.dp + (1000.dp * canvasAnimationState.value))
         )
         Image(
             alignment = Alignment.BottomStart,
@@ -103,7 +103,7 @@ fun MovieReelStripAnimation(
             modifier = Modifier
                 .padding(bottom = 100.dp)
                 .scale(canvasAnimationState.value)
-                .offset(x = 500.dp - (1000.dp*canvasAnimationState.value))
+                .offset(x = 500.dp - (1000.dp * canvasAnimationState.value))
         )
     }
 }
@@ -116,6 +116,10 @@ fun IntroText(
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
+        val modifier = Modifier
+            .padding(top = 10.dp)
+            .fillMaxWidth()
+            .scale(textAnimationState.value)
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = "Sample",
@@ -137,32 +141,41 @@ fun IntroText(
                     .padding(top = 20.dp)
                     .scale(titleAnimationState.value)
             )
+
             Text(
-                text = "Clean code architecture",
+                text = "Clean code, MVVM with UseCase",
                 color = Color.White,
+                fontSize = 12.sp,
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 30.dp)
-                    .scale(textAnimationState.value)
+                modifier = modifier then Modifier.padding(top = 30.dp)
             )
             Text(
                 text = "Jetpack compose",
                 color = Color.White,
+                fontSize = 12.sp,
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
-                    .scale(textAnimationState.value)
+                modifier = modifier
             )
             Text(
-                text = "Offline first",
+                text = "Hilt Dependency Injection",
                 color = Color.White,
+                fontSize = 12.sp,
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
-                    .scale(textAnimationState.value)
+                modifier = modifier
+            )
+            Text(
+                text = "RoomsDB offline and data persistence",
+                color = Color.White,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                modifier = modifier
+            )
+            Text(
+                text = "Coroutines, flows, states",
+                color = Color.White,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                modifier = modifier
             )
         }
     }

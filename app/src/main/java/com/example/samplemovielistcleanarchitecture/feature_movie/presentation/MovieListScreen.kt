@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.samplemovielistcleanarchitecture.R
@@ -66,6 +67,7 @@ fun MovieListScreen(navigateToNextScreen: () -> Unit = {}, viewModel: MovieViewM
             text = "Swipe down\nfor more",
             textAlign = TextAlign.Center,
             color = Color.White,
+            fontSize = 10.sp,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .scale(swipeDownAminState.value)
@@ -208,7 +210,7 @@ fun MovieItemUI(movieItem: MovieItemEntity = testMovieItem) {
                     .padding(top = 12.dp),
                 text = "${movieItem.vote_count} votes",
                 style = MaterialTheme.typography.subtitle2,
-                color = Color.Red
+                color = Color.Magenta
             )
         }
     }
