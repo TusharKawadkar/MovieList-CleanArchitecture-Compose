@@ -1,14 +1,18 @@
 package com.example.samplemovielistcleanarchitecture.feature_movie.presentation
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.EaseInQuad
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,10 +24,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.scale
@@ -35,7 +41,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,67 +49,129 @@ import com.example.samplemovielistcleanarchitecture.R
 import com.example.samplemovielistcleanarchitecture.core.ui.theme.Purple40
 import com.example.samplemovielistcleanarchitecture.core.ui.theme.Purple80
 import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.local.MovieItemEntity
+import com.example.samplemovielistcleanarchitecture.feature_movie.data.repository.movielist.FakeMovieListRepository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Preview
 @Composable
-fun MovieListScreen(navigateToNextScreen: () -> Unit = {}, viewModel: MovieViewModel = hiltViewModel()) {
-
-    val movieListState = viewModel.movieListState
-
+fun MovieListScreen(
+    navigateToNextScreen: () -> Unit = {},
+    viewModel: MovieViewModel = hiltViewModel()
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        LazyColumn(modifier = Modifier.matchParentSize()) {
-            this.items(movieListState.value.size) {
-                MovieItemUI(movieListState.value[it])
-            }
+        val loadingAnimState = remember {
+            Animatable(0f)
         }
-        val swipeDownAminState = remember {
-            Animatable(0.8f)
-        }
-        Text(
-            text = "Swipe down\nfor more",
-            textAlign = TextAlign.Center,
-            color = Color.White,
-            fontSize = 10.sp,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .scale(swipeDownAminState.value)
+        val coroutineScope = rememberCoroutineScope()
+        IndicationStateUi(
+            state = viewModel,
+            loadingAnimState = loadingAnimState,
+            coroutineScope = coroutineScope
         )
-        LaunchedEffect(Unit) {
-            launch {
-                swipeDownAminState.animateTo(
-                    1f,
-                    animationSpec = infiniteRepeatable(
-                        animation = tween(
-                            500,
-                            easing = EaseInQuad
-                        ),
-                        repeatMode = RepeatMode.Reverse
+        MovieListUi(viewModel, loadingAnimState) {
+            viewModel.onEvent(MovieViewModel.MovieEvent.Refresh)
+        }
+    }
+}
+
+@Composable
+fun IndicationStateUi(
+    state: MovieViewModel,
+    loadingAnimState: Animatable<Float, AnimationVector1D>,
+    coroutineScope: CoroutineScope
+) {
+    val currentState by rememberUpdatedState(state.indicationUiState)
+    Log.e("STATEE", "received $currentState")
+    LaunchedEffect(currentState.value) {
+        when (currentState.value) {
+            is MovieViewModel.IndicationStates.Loading -> {
+                coroutineScope.launch {
+                    Log.e("STATEE", "--  $currentState")
+                    loadingAnimState.snapTo(0f)
+                    loadingAnimState.animateTo(
+                        targetValue = 360f,
+                        animationSpec = infiniteRepeatable(animation = tween(500))
                     )
-                )
+                }
+            }
+
+            is MovieViewModel.IndicationStates.ClearAll -> {
+                coroutineScope.launch {
+                    Log.e("STATEE", "--  $currentState")
+                    loadingAnimState.stop()
+                }
+            }
+
+            is MovieViewModel.IndicationStates.Failed -> {
+                coroutineScope.launch {
+                    Log.e("STATEE", "--  $currentState")
+                    loadingAnimState.stop()
+                }
             }
         }
     }
 }
 
-val testMovieItem = MovieItemEntity(
-    1,
-    "en",
-    "The Hunger Games: The Ballad of Songbirds",
-    "64 years before he becomes the tyrannical president of Panem, Coriolanus Snow sees a chance for a change in fortunes when he mentors Lucy Gray Baird, the female tribute from District 12.",
-    200,
-    "2023-11-15",
-    "/5a4JdoFwll5DRtKMe7JLuGQ9yJm.jpg",
-    false
-)
-
-@Preview
 @Composable
-fun MovieItemUI(movieItem: MovieItemEntity = testMovieItem) {
+fun BoxScope.MovieListUi(
+    viewModel: MovieViewModel,
+    loadingAnimState: Animatable<Float, AnimationVector1D>,
+    onRefresh: () -> Unit
+) {
+    val movieListState = viewModel.movieListState.value
+    val swipeDownAminState = remember {
+        Animatable(0.8f)
+    }
+    LaunchedEffect(Unit) {
+        launch {
+            swipeDownAminState.animateTo(
+                1f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(
+                        500,
+                        easing = EaseInQuad
+                    ),
+                    repeatMode = RepeatMode.Reverse
+                )
+            )
+        }
+    }
+
+    LazyColumn(modifier = Modifier.matchParentSize()) {
+        this.items(movieListState.size) {
+            MovieItemUI(movieListState[it])
+        }
+    }
+    Image(
+        painter = painterResource(id = R.drawable.baseline_refresh_24),
+        contentDescription = null,
+        modifier = Modifier
+            .align(Alignment.TopEnd)
+            .clickable {
+                onRefresh()
+            }
+            .padding(all = 16.dp)
+            .graphicsLayer {
+                rotationZ = loadingAnimState.value
+            }
+    )
+    Text(
+        text = "Swipe down\nfor more",
+        textAlign = TextAlign.Center,
+        color = Color.White,
+        fontSize = 10.sp,
+        modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .scale(swipeDownAminState.value)
+    )
+}
+
+@Composable
+fun MovieItemUI(movieItem: MovieItemEntity = FakeMovieListRepository.testMovieItem) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

@@ -110,6 +110,9 @@ dependencies {
     //testImplementation("com.google.dagger:hilt-android-testing:$hiltVer")
     //testAnnotationProcessor("com.google.dagger:hilt-compiler:$hiltVer")
 
+    //Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+
 
 }
 

@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -19,6 +20,7 @@ import androidx.navigation.navigation
 import com.example.samplemovielistcleanarchitecture.feature_movie.presentation.MovieListScreen
 import com.example.samplemovielistcleanarchitecture.feature_intro.presentation.SplashScreen
 import com.example.samplemovielistcleanarchitecture.core.ui.theme.AppTheme
+import com.example.samplemovielistcleanarchitecture.feature_movie.presentation.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

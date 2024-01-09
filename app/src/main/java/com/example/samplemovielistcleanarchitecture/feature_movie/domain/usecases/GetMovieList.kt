@@ -3,6 +3,7 @@ package com.example.samplemovielistcleanarchitecture.feature_movie.domain.usecas
 import com.example.samplemovielistcleanarchitecture.core.network.dto.CommonFailureType
 import com.example.samplemovielistcleanarchitecture.core.network.dto.RemoteResponseResult
 import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.local.MovieItemEntity
+import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.remote.MovieListApiResponseDto
 import com.example.samplemovielistcleanarchitecture.feature_movie.data.repository.movielist.MovieListRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class GetMovieList @Inject constructor(private val repository: MovieListRepository) {
+class GetMovieList(private val repository: MovieListRepository) {
 
     sealed class States {
         data object Fetching : States()
@@ -27,40 +28,18 @@ class GetMovieList @Inject constructor(private val repository: MovieListReposito
         repository.observeMovieList().collect {
             if (it.isEmpty()) {
                 emit(States.Fetching)
-                repository.getMoviesListRemote().collect { result ->
-                    when (result) {
-                        is RemoteResponseResult.Success -> {
-                            repository.updateRemoteDataToDb(result.t.results!!)
-                            emit(States.Fetching)
-                        }
+                when (val result: RemoteResponseResult<MovieListApiResponseDto> = repository.getMoviesListRemote()) {
+                    is RemoteResponseResult.Success -> {
+                        repository.updateRemoteDataToDb(result.t.results!!)
+                    }
 
-                        is RemoteResponseResult.Failed -> {
-                            emit(States.Failed(result.type, result.message))
-                        }
+                    is RemoteResponseResult.Failed -> {
+                        emit(States.Failed(result.type, result.message))
                     }
                 }
             } else {
                 emit(States.Loaded(it))
             }
         }
-        /*return repository.observeMovieList().map {
-            if (it.isEmpty()) {
-                repository.getMoviesListRemote().collect { result ->
-                    when (result) {
-                        is RemoteResponseResult.Success -> {
-                            repository.updateRemoteDataToDb(result.t.results!!)
-                            States.Fetching
-                        }
-
-                        is RemoteResponseResult.Failed -> {
-                            States.Failed(result.type, result.message)
-                        }
-                    }
-                }
-                States.Fetching
-            } else {
-                States.Loaded(it)
-            }
-        }*/
     }
 }

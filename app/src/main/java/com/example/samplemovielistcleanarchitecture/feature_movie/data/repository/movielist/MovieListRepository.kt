@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface MovieListRepository {
     fun observeMovieList(): Flow<List<MovieItemEntity>>
 
-    suspend fun getMoviesListRemote(): Flow<RemoteResponseResult<MovieListApiResponseDto>>
+    suspend fun getMoviesListRemote(): RemoteResponseResult<MovieListApiResponseDto>
 
-    suspend fun updateRemoteDataToDb(movieList: List<MovieListItemDto>)
+    fun updateRemoteDataToDb(movieList: List<MovieListItemDto>)
 }

@@ -7,6 +7,7 @@ import com.example.samplemovielistcleanarchitecture.feature_movie.data.sources.l
 import com.example.samplemovielistcleanarchitecture.feature_movie.data.sources.remote.MoviesApiService
 import com.example.samplemovielistcleanarchitecture.feature_movie.domain.usecases.GetMovieList
 import com.example.samplemovielistcleanarchitecture.feature_movie.domain.usecases.MovieUseCase
+import com.example.samplemovielistcleanarchitecture.feature_movie.domain.usecases.RefreshMovieList
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,11 +19,13 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object MoviesDependenciesModule {
 
+    @Singleton
     @Provides
     fun provideApiService(retrofit: Retrofit): MoviesApiService {
         return retrofit.create(MoviesApiService::class.java)
     }
 
+    @Singleton
     @Provides
     fun provideMovieListRepository(
         dao: MoviesDao,
@@ -35,6 +38,6 @@ object MoviesDependenciesModule {
     @Singleton
     @Provides
     fun provideMovieUseCase(repository: MovieListRepository): MovieUseCase {
-        return MovieUseCase(getMovie = GetMovieList(repository))
+        return MovieUseCase(getMovie = GetMovieList(repository), refreshMovieList = RefreshMovieList(repository))
     }
 }

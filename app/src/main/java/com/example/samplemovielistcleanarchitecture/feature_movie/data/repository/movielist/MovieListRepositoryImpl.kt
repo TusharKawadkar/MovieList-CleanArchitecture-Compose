@@ -9,9 +9,7 @@ import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.re
 import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.remote.MovieListItemDto
 import com.example.samplemovielistcleanarchitecture.feature_movie.data.sources.local.MoviesDao
 import com.example.samplemovielistcleanarchitecture.feature_movie.data.sources.remote.MoviesApiService
-import kotlinx.coroutines.flow.flow
 import java.lang.Exception
-import javax.inject.Inject
 
 class MovieListRepositoryImpl(
     private val dao: MoviesDao,
@@ -21,7 +19,7 @@ class MovieListRepositoryImpl(
 
     override fun observeMovieList() = dao.observeMovieList()
 
-    override suspend fun updateRemoteDataToDb(movieList: List<MovieListItemDto>) {
+    override fun updateRemoteDataToDb(movieList: List<MovieListItemDto>) {
         val dataList = movieList.map {
             MovieItemEntity(
                 it.id,
@@ -33,34 +31,29 @@ class MovieListRepositoryImpl(
                 it.poster_path
             )
         }
-        repeat(dataList.size) {
+        /*repeat(dataList.size) {
             dao.addMoviesToDb(dataList[it])
-        }
+        }*/
+        dao.addMoviesToDb(dataList)
     }
 
-    override suspend fun getMoviesListRemote() =
-        flow<RemoteResponseResult<MovieListApiResponseDto>> {
-            if (networkUtils.isNetworkAvailable()) {
-                try {
-                    val response = api.fetchMoviesList()
-                    return@flow emit(parseMovieListResponse(response))
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    emit(
-                        RemoteResponseResult.Failed(
-                            CommonFailureType.DATA_ERROR, AppConstants.SOMETHING_WENT_WRONG
-                        )
-                    )
-                }
-            } else {
-                emit(
-                    RemoteResponseResult.Failed(
-                        CommonFailureType.NO_INTERNET, AppConstants.PLEASE_CHECK_CONNECTION
-                    )
+    override suspend fun getMoviesListRemote(): RemoteResponseResult<MovieListApiResponseDto> {
+        return if (networkUtils.isNetworkAvailable()) {
+            try {
+                val response = api.fetchMoviesList()
+                parseMovieListResponse(response)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                RemoteResponseResult.Failed(
+                    CommonFailureType.DATA_ERROR, AppConstants.SOMETHING_WENT_WRONG
                 )
             }
+        } else {
+            RemoteResponseResult.Failed(
+                CommonFailureType.NO_INTERNET, AppConstants.PLEASE_CHECK_CONNECTION
+            )
         }
-
+    }
     private fun parseMovieListResponse(response: MovieListApiResponseDto?): RemoteResponseResult<MovieListApiResponseDto> {
         return response?.let {
             try {

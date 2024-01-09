@@ -1,6 +1,6 @@
 package com.example.samplemovielistcleanarchitecture.feature_movie.presentation
 
-import android.util.Log
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -9,12 +9,12 @@ import com.example.samplemovielistcleanarchitecture.core.network.dto.CommonFailu
 import com.example.samplemovielistcleanarchitecture.feature_movie.data.models.local.MovieItemEntity
 import com.example.samplemovielistcleanarchitecture.feature_movie.domain.usecases.GetMovieList
 import com.example.samplemovielistcleanarchitecture.feature_movie.domain.usecases.MovieUseCase
+import com.example.samplemovielistcleanarchitecture.feature_movie.domain.usecases.RefreshMovieList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,16 +31,53 @@ class MovieViewModel @Inject constructor(
     val movieListState: State<List<MovieItemEntity>>
         get() = _movieListState
 
-    private var coroutine: CoroutineScope = CoroutineScope(Dispatchers.IO)
+    private var refreshJob: Job? = null
 
     init {
         observeMovieListStates()
     }
 
+    fun onEvent(movieEvent: MovieEvent) {
+        when (movieEvent) {
+            MovieEvent.Refresh -> {
+                clearRefreshJob()
+                refreshJob = viewModelScope.launch(Dispatchers.IO) {
+                    refreshMovielist(this)
+                }
+            }
+        }
+    }
+
+    private suspend fun refreshMovielist(coroutineScope: CoroutineScope) {
+        coroutineScope.run {
+            movieUseCase.refreshMovieList().buffer().collect { state ->
+                when (state) {
+                    is RefreshMovieList.States.Fetching -> {
+                        setIndicationAsLoading()
+                    }
+
+                    is RefreshMovieList.States.Loaded -> {
+                        clearRefreshJob()
+                    }
+
+                    is RefreshMovieList.States.Failed -> {
+                        //delay(1000)
+                        setIndicationAsFailed(state.type, state.message)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun clearRefreshJob() {
+        refreshJob?.cancel()
+        refreshJob = null
+    }
+
     private fun observeMovieListStates() {
-        coroutine.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             movieUseCase.getMovie()
-                .onEach { state ->
+                .collect { state ->
                     when (state) {
                         is GetMovieList.States.Fetching -> {
                             setIndicationAsLoading()
@@ -48,7 +85,9 @@ class MovieViewModel @Inject constructor(
 
                         is GetMovieList.States.Loaded -> {
                             setIndicationAsClearAll()
-                            _movieListState.value = state.data
+                            viewModelScope.launch {
+                                _movieListState.value = state.data
+                            }
                         }
 
                         is GetMovieList.States.Failed -> {
@@ -56,27 +95,38 @@ class MovieViewModel @Inject constructor(
                         }
                     }
                 }
-                .launchIn(this)
         }
     }
 
     private fun setIndicationAsLoading() {
-        _indicationState.value = IndicationStates.Loading
+        viewModelScope.launch {
+            _indicationState.value = IndicationStates.Loading
+        }
     }
 
     private fun setIndicationAsClearAll() {
-        _indicationState.value = IndicationStates.ClearAll
+        viewModelScope.launch {
+            _indicationState.value = IndicationStates.ClearAll
+        }
     }
 
     private fun setIndicationAsFailed(type: CommonFailureType, msg: String) {
-        _indicationState.value = IndicationStates.Failed(type, msg)
+        viewModelScope.launch {
+            _indicationState.value = IndicationStates.Failed(type, msg)
+        }
     }
 
+    @Stable
     sealed class IndicationStates {
         data object Loading : IndicationStates()
         data object ClearAll : IndicationStates()
         data class Failed(val type: CommonFailureType, val message: String) :
             IndicationStates()
+    }
+
+    @Stable
+    sealed class MovieEvent {
+        data object Refresh : MovieEvent()
     }
 
 }

@@ -15,6 +15,6 @@ interface MoviesDao {
     fun observeMovieList(): Flow<List<MovieItemEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addMoviesToDb(moviesList: MovieItemEntity)
+    fun addMoviesToDb(movieList: List<MovieItemEntity>)
 
 }
