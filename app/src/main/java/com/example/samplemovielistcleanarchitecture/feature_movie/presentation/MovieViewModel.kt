@@ -14,7 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -50,22 +50,24 @@ class MovieViewModel @Inject constructor(
 
     private suspend fun refreshMovielist(coroutineScope: CoroutineScope) {
         coroutineScope.run {
-            movieUseCase.refreshMovieList().buffer().collect { state ->
-                when (state) {
-                    is RefreshMovieList.States.Fetching -> {
-                        setIndicationAsLoading()
-                    }
+            movieUseCase.refreshMovieList()
+                .collect { state ->
+                    when (state) {
+                        is RefreshMovieList.States.Fetching -> {
+                            setIndicationAsLoading()
+                            delay(100)
+                        }
 
-                    is RefreshMovieList.States.Loaded -> {
-                        clearRefreshJob()
-                    }
+                        is RefreshMovieList.States.Loaded -> {
+                            clearRefreshJob()
+                        }
 
-                    is RefreshMovieList.States.Failed -> {
-                        //delay(1000)
-                        setIndicationAsFailed(state.type, state.message)
+                        is RefreshMovieList.States.Failed -> {
+                            //delay(500)
+                            setIndicationAsFailed(state.type, state.message)
+                        }
                     }
                 }
-            }
         }
     }
 
@@ -81,6 +83,7 @@ class MovieViewModel @Inject constructor(
                     when (state) {
                         is GetMovieList.States.Fetching -> {
                             setIndicationAsLoading()
+                            delay(100)
                         }
 
                         is GetMovieList.States.Loaded -> {

@@ -84,13 +84,11 @@ fun IndicationStateUi(
     loadingAnimState: Animatable<Float, AnimationVector1D>,
     coroutineScope: CoroutineScope
 ) {
-    val currentState by rememberUpdatedState(state.indicationUiState)
-    Log.e("STATEE", "received $currentState")
+    val currentState = rememberUpdatedState(newValue = state.indicationUiState.value)
     LaunchedEffect(currentState.value) {
         when (currentState.value) {
             is MovieViewModel.IndicationStates.Loading -> {
                 coroutineScope.launch {
-                    Log.e("STATEE", "--  $currentState")
                     loadingAnimState.snapTo(0f)
                     loadingAnimState.animateTo(
                         targetValue = 360f,
@@ -101,14 +99,12 @@ fun IndicationStateUi(
 
             is MovieViewModel.IndicationStates.ClearAll -> {
                 coroutineScope.launch {
-                    Log.e("STATEE", "--  $currentState")
                     loadingAnimState.stop()
                 }
             }
 
             is MovieViewModel.IndicationStates.Failed -> {
                 coroutineScope.launch {
-                    Log.e("STATEE", "--  $currentState")
                     loadingAnimState.stop()
                 }
             }
