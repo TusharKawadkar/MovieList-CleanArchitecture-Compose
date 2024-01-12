@@ -31,9 +31,6 @@ class MovieListRepositoryImpl(
                 it.poster_path
             )
         }
-        /*repeat(dataList.size) {
-            dao.addMoviesToDb(dataList[it])
-        }*/
         dao.addMoviesToDb(dataList)
     }
 
