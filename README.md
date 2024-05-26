@@ -16,7 +16,7 @@ Leveraging the power of **Jetpack Compose**, this project exemplifies modern And
 - **Offline-First:** Enhancing user experience by prioritizing offline functionality by syncing remote and local data.
 - **Jetpack Compose:** Modern Android UI toolkit for building native UIs with declarative syntax.
 
-![](./clean%20code.webp)
+![](./clean-code.webp)
 
 
 ## Getting Started
